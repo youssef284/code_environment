@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('https://github.com/youssef284/code_environment.git') {
+            steps {
+                // Check outHTML project from the Git repository
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/youssef284/code_environment.git']]])
+            }
+        }
+        
+        stage('Build and Test HTML') {
+            steps {
+                // Add any HTML build and testing steps here
+                // For example, you can use a linter, validator, or testing tool
+                
+                // Replace the following echo commands with actual build and test commands
+                echo 'Building HTML...'
+                sh 'sh 'docker-compose up -d' '
+                
+                echo 'Testing HTML...'
+                sh 'sh 'npm test''
+            }
+        }
+    }
+    
+    post {
+        success {
+            // Archive the HTML artifacts or files you want to keep
+            archiveArtifacts artifacts: '**/your-artifact-files-or-directory'
+        }
+    }
+}
